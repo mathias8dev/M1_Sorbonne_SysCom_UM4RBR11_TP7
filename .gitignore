@@ -1,0 +1,4 @@
+.vscode/
+.PythonImport*
+.python-version
+__pycache__/
