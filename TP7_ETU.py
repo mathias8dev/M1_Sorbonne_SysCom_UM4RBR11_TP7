@@ -9,8 +9,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 
 import tensorflow as tf
-from tensorflow.keras import Model, Input
-from tensorflow.keras.layers import Dense, Flatten
+from keras import Model, Input
+from keras.layers import Dense, Flatten
+
 
 
 
@@ -36,14 +37,15 @@ def affiche(history):
 ##################################################
 # I - Load pre-shuffled MNIST data train and test sets
 ##################################################
-from tensorflow.keras.datasets.mnist import load_data
+from keras.datasets.mnist import load_data
 
 # load dataset
 (X_train, y_train), (X_test, y_test) = load_data()
+random_state = 247
 
 #Ne conserve que 10% de la base
-X_train, pipo, y_train, pipo = train_test_split(X_train, y_train, test_size=0.9, random_state=***)
-X_test, pipo, y_test, pipo = train_test_split(X_test, y_test, test_size=0.9, random_state=***)
+X_train, pipo, y_train, pipo = train_test_split(X_train, y_train, test_size=0.9, random_state=random_state)
+X_test, pipo, y_test, pipo = train_test_split(X_test, y_test, test_size=0.9, random_state=random_state)
 
 for i in range(200):
   plt.subplot(10,20,i+1)
@@ -51,6 +53,7 @@ for i in range(200):
   plt.axis('off')
 plt.show()
 
+print(X_train.shape)
 # Preprocess input data
 X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], X_train.shape[2], 1)
 X_test = X_test.reshape(X_test.shape[0], X_train.shape[1], X_train.shape[2], 1)
@@ -77,7 +80,7 @@ model.summary()
 
 # II.2. Apprentissage
 
-# lr= 0.01
+lr= 0.01
 batch_size=256
 epochs=20
 sgd1= tf.keras.optimizers.SGD(learning_rate=lr)
@@ -103,5 +106,14 @@ y_pred = model.predict(X_test)
 y_pred = y_pred.argmax(axis=-1)
 print('Confusion Matrix')
 print(confusion_matrix(y_test, y_pred))
+
+# III. MLP
+inputs = Input(shape=(28,28,1))
+x = inputs
+x=Flatten()(x)
+outputs=Dense(10, activation='softmax')(x)
+outputs=Dense(10, activation='softmax')(x)
+model = Model(inputs, outputs)
+model.summary()
 
 
